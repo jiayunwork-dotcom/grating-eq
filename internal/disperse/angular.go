@@ -51,6 +51,7 @@ func AngularDispersion(g grating.Grating, res grating.OrderResult) AngularDisper
 	out.Value = float64(res.Order) / out.Denominator
 	out.ValueDegNm = grating.Degrees(out.Value)
 	out.Defined = true
+	recordOrderDispersion(res.Order, out.Value)
 	return out
 }
 
