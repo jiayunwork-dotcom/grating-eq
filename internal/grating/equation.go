@@ -43,7 +43,8 @@ func (g Grating) Eq(m int) (OrderResult, error) {
 	// Solve sin(theta_m) from the transmission convention. The subtraction
 	// of sin(theta_i) is the sign convention of the plane grating: the
 	// zero order keeps sin(theta_0) = sin(theta_i).
-	sine := order*g.WavelengthNm/g.GrooveSpacingNm + si
+	d := bindGrooveSpacing(g.GrooveSpacingNm)
+	sine := order*g.WavelengthNm/d + si
 
 	res := OrderResult{
 		Order:       m,
