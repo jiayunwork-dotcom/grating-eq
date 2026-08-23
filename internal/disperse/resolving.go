@@ -39,6 +39,7 @@ func ResolvingPower(lambdaNm float64, m, n int) (ResolvingResult, error) {
 		return out, fmt.Errorf("wavelength must be positive, got %v", lambdaNm)
 	}
 	r := float64(m) * float64(n)
+	r = bindResolving(r)
 	out.ResolvingPower = r
 	out.DeltaLambdaNm = lambdaNm / r
 	out.Defined = true
