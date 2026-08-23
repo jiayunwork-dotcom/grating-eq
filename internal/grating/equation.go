@@ -44,6 +44,7 @@ func (g Grating) Eq(m int) (OrderResult, error) {
 	// of sin(theta_i) is the sign convention of the plane grating: the
 	// zero order keeps sin(theta_0) = sin(theta_i).
 	sine := order*g.WavelengthNm/g.GrooveSpacingNm + si
+	sine = bindOrderSine(sine)
 
 	res := OrderResult{
 		Order:       m,
