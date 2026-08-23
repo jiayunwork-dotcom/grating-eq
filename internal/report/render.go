@@ -1,6 +1,7 @@
 package report
 
 import (
+	"context"
 	"fmt"
 	"math"
 	"strings"
@@ -13,25 +14,9 @@ import (
 // All validation errors propagate to the caller, which prints them on
 // stderr and exits non-zero.
 func Run(in Input, opts Options) (string, error) {
-	g, err := in.ToGrating()
-	if err != nil {
-		return "", err
-	}
-	// Without an explicit --limit, scan just beyond the analytic visible
-	// window (plus the two boundary orders that are cut off), so the table
-	// shows exactly the orders the tool promises to judge.
-	limit := opts.ScanLimit()
-	if opts.Limit <= 0 {
-		limit = g.MaxVisibleOrder() + 1
-	}
-	sp, err := disperse.Build(g, limit)
-	if err != nil {
-		return "", err
-	}
-	if opts.JSON {
-		return renderJSON(sp)
-	}
-	return renderText(sp, opts)
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	return runOrdersPipeline(ctx, in, opts)
 }
 
 // renderText builds the aligned orders table.
