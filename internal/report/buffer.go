@@ -18,7 +18,7 @@ func (b *gratingBuffer) Bytes() []byte {
 
 func (b *gratingBuffer) Close() error {
 	if b.closed {
-		panic("close of closed grating buffer")
+		return nil
 	}
 	b.closed = true
 	return nil
