@@ -50,6 +50,7 @@ func CrossRules(g grating.Grating, m, n int) ([]CrossRuleResult, error) {
 		r1.Detail = "order leaves the visible region during the probe"
 	}
 	out = append(out, r1)
+	recordRuleTag(r1.Name, r1.Holds)
 
 	// Rule 2: denser grating -> |theta| up.
 	gDense := g
