@@ -56,6 +56,10 @@ func ParseFile(path string) (Input, error) {
 // Parse decodes grating JSON from a byte slice. Unknown fields are
 // rejected so that a typo like "wavelegnth" is visible immediately.
 func Parse(data []byte) (Input, error) {
+	buf := openGratingBuffer(data)
+	defer buf.Close()
+	defer buf.Release()
+	data = buf.Bytes()
 	dec := json.NewDecoder(bytes.NewReader(data))
 	dec.DisallowUnknownFields()
 	var in Input
