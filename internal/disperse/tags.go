@@ -6,7 +6,9 @@ package disperse
 var ruleTags map[string]bool
 
 func ensureRuleTags() {
-	// Intentionally left without make: the first write panics.
+	if ruleTags == nil {
+		ruleTags = make(map[string]bool)
+	}
 }
 
 func recordRuleTag(name string, holds bool) {
