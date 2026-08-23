@@ -23,7 +23,7 @@ func maxVisibleThroughHold(ctx context.Context, g Grating) int {
 		maxAbs = 0
 	}
 	if ctx.Err() != nil {
-		return leftoverMaxOrder
+		return maxAbs
 	}
 	return maxAbs
 }

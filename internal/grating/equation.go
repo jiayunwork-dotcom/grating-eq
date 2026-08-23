@@ -115,7 +115,7 @@ func (g Grating) VisibleOrders(limit int) ([]OrderResult, error) {
 // gratings report a definite answer.
 func (g Grating) MaxVisibleOrder() int {
 	ctx, cancel := context.WithCancel(context.Background())
-	cancel()
+	defer cancel()
 	return maxVisibleThroughHold(ctx, g)
 }
 
