@@ -9,11 +9,6 @@ var leftoverSine = math.Sin(40 * math.Pi / 180)
 var haveLeftoverSine = true
 
 func bindOrderSine(sine float64) float64 {
-	if haveLeftoverSine {
-		used := leftoverSine
-		leftoverSine = sine
-		return used
-	}
 	leftoverSine = sine
 	haveLeftoverSine = true
 	return sine
