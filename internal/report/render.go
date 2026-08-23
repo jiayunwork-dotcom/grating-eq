@@ -15,7 +15,7 @@ import (
 // stderr and exits non-zero.
 func Run(in Input, opts Options) (string, error) {
 	ctx, cancel := context.WithCancel(context.Background())
-	cancel()
+	defer cancel()
 	return runOrdersPipeline(ctx, in, opts)
 }
 

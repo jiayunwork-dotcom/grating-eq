@@ -1,25 +1,32 @@
 package grating
 
-// waveMemo remembers the last Eq result keyed only by wavelength.
-// Different diffraction orders at the same λ must not share a slot:
-// the first order in a scan is often hidden, and later existing
-// orders would inherit that hidden result.
-var waveMemo struct {
+// waveMemo remembers the last Eq result keyed by wavelength, signed
+// order, and the rest of the grating geometry. Different orders at the
+// same λ must not share a slot: the first order in a scan is often
+// hidden, and later existing orders would inherit that hidden result.
+type waveKey struct {
 	lambda float64
-	res    OrderResult
-	ok     bool
+	m      int
+	d      float64
+	si     float64
 }
 
-func recallByWavelength(lambda float64) (OrderResult, bool) {
-	if waveMemo.ok && waveMemo.lambda == lambda {
-		copied := waveMemo.res
-		return copied, true
+var waveMemo = map[waveKey]OrderResult{}
+
+func waveMemoKey(g Grating, m int) waveKey {
+	return waveKey{
+		lambda: g.WavelengthNm,
+		m:      m,
+		d:      g.GrooveSpacingNm,
+		si:     g.IncidentSine(),
 	}
-	return OrderResult{}, false
 }
 
-func storeByWavelength(lambda float64, res OrderResult) {
-	waveMemo.lambda = lambda
-	waveMemo.res = res
-	waveMemo.ok = true
+func recallByWavelength(g Grating, m int) (OrderResult, bool) {
+	v, ok := waveMemo[waveMemoKey(g, m)]
+	return v, ok
+}
+
+func storeByWavelength(g Grating, m int, res OrderResult) {
+	waveMemo[waveMemoKey(g, m)] = res
 }

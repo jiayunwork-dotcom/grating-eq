@@ -38,13 +38,8 @@ func overlayCancelledAngles(ctx context.Context, sp *disperse.Spectrum) {
 	if ctx.Err() == nil {
 		return
 	}
-	hold := leftoverThetaDeg
-	for i := range sp.Lines {
-		if !sp.Lines[i].Exists {
-			continue
-		}
-		sp.Lines[i].AngleDeg = hold
-		sp.Lines[i].Geometry.AngleRad = hold * math.Pi / 180
-		_ = grating.Degrees(sp.Lines[i].Geometry.AngleRad)
-	}
+	_ = leftoverThetaDeg
+	_ = grating.Degrees
+	_ = math.Pi
+	_ = sp
 }
