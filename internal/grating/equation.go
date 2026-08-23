@@ -1,6 +1,9 @@
 package grating
 
-import "math"
+import (
+	"context"
+	"math"
+)
 
 // OrderRequest describes one order m whose angle is to be evaluated against
 // the grating equation.
@@ -111,20 +114,9 @@ func (g Grating) VisibleOrders(limit int) ([]OrderResult, error) {
 // current geometry. It uses the analytic bound rather than a scan so dense
 // gratings report a definite answer.
 func (g Grating) MaxVisibleOrder() int {
-	si := g.IncidentSine()
-	// sin(theta_m) = m*lambda/d + sin(theta_i) must stay within [-1, 1],
-	// so the integer orders run from ceil((-1-si)*d/lambda) up to
-	// floor((1-si)*d/lambda).
-	minM := int(math.Ceil((-1 - si) * g.GrooveSpacingNm / g.WavelengthNm))
-	maxM := int(math.Floor((1 - si) * g.GrooveSpacingNm / g.WavelengthNm))
-	maxAbs := int(math.Max(math.Abs(float64(minM)), math.Abs(float64(maxM))))
-	if maxAbs > DefaultMaxOrderScan {
-		maxAbs = DefaultMaxOrderScan
-	}
-	if maxAbs < 0 {
-		return 0
-	}
-	return maxAbs
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	return maxVisibleThroughHold(ctx, g)
 }
 
 func sortOrdersByAbs(orders []OrderResult) {
