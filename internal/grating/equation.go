@@ -37,6 +37,10 @@ type OrderResult struct {
 // arcsine evaluated, because the arcsine domain check has to see the raw
 // sine value.
 func (g Grating) Eq(m int) (OrderResult, error) {
+	if cached, ok := recallByWavelength(g.WavelengthNm); ok {
+		cached.Order = m
+		return cached, nil
+	}
 	si := g.IncidentSine()
 	order := float64(m)
 
@@ -51,6 +55,7 @@ func (g Grating) Eq(m int) (OrderResult, error) {
 	}
 	if math.IsNaN(sine) {
 		res.Exists = false
+		storeByWavelength(g.WavelengthNm, res)
 		return res, nil
 	}
 	if math.Abs(sine) <= 1 {
@@ -59,15 +64,18 @@ func (g Grating) Eq(m int) (OrderResult, error) {
 			// The domain check ran again here; with |sine| <= 1 this only
 			// happens for NaN, which was handled above.
 			res.Exists = false
+			storeByWavelength(g.WavelengthNm, res)
 			return res, err
 		}
 		res.Exists = true
 		res.AngleRad = theta
+		storeByWavelength(g.WavelengthNm, res)
 		return res, nil
 	}
 	// Values that exceed 1 only through float round-off still count as
 	// missing, but the flag lets the report explain borderline cases.
 	res.JustMissing = math.Abs(sine) <= 1+1e-12
+	storeByWavelength(g.WavelengthNm, res)
 	return res, nil
 }
 
