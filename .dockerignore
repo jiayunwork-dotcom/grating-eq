@@ -1,0 +1,14 @@
+.git
+.gitignore
+.DS_Store
+node_modules
+vendor
+out/
+dist/
+docker.log
+docker-test.log
+run.log
+test.log
+build.log
+build2.log
+vet.log
