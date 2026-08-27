@@ -1,0 +1,6 @@
+{
+  "grooves_per_mm": 300,
+  "wavelength_nm": 550,
+  "incident_angle_deg": 0,
+  "slits": 2000
+}
